@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "20292785743",
+    "project_id": "usper-app-flutter",
+    "storage_bucket": "usper-app-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20292785743:android:a7328233aeae9d4986fc3a",
+        "android_client_info": {
+          "package_name": "com.usper_app_flutter.usper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5qOvnSzL-2HAVX3nwOLpH0KidSQJjZeg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

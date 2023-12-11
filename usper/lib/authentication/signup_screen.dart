@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:usper/authentication/login_screen.dart';
 import 'package:usper/methods/common_methods.dart';
+import 'package:usper/pages/home_page.dart';
+import 'package:usper/widgets/loading_dialog.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -13,8 +17,8 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen>
 {
-  TextEditingController userNameEditingController = TextEditingController();
-  TextEditingController userPhoneEditingController = TextEditingController();
+  TextEditingController userNameTextEditingController = TextEditingController();
+  TextEditingController userPhoneTextEditingController = TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
   CommonMethods cMethods = CommonMethods();
@@ -29,15 +33,15 @@ class _SignUpScreenState extends State<SignUpScreen>
 
   signUpFormValidation()
   {
-    if(userNameEditingController.text.trim().length < 3)
+    if(userNameTextEditingController.text.trim().length < 3)
       {
         cMethods.displaySnackBar("Your name must have at least 4 characters.", context);
       }
-    else if(userPhoneEditingController.text.trim().length < 7)
+    else if(userPhoneTextEditingController.text.trim().length < 7)
     {
       cMethods.displaySnackBar("Your phone must have at least 8 characters.", context);
     }
-    else if(emailTextEditingController.text.contains("@"))
+    else if(!emailTextEditingController.text.contains("@"))
     {
       cMethods.displaySnackBar("You need to enter with a valid email.", context);
     }
@@ -47,7 +51,46 @@ class _SignUpScreenState extends State<SignUpScreen>
     }
     else {
       // register
+      registerNewUser();
     }
+  }
+
+  registerNewUser() async
+  {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => LoadingDialog(messageText: "Registering your account..."),
+    );
+
+    final User? userFirebase = (
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailTextEditingController.text.trim(),
+        password: passwordTextEditingController.text.trim(),
+      ).catchError((errorMsg)
+      {
+        Navigator.pop(context);
+        cMethods.displaySnackBar(errorMsg.toString(), context);
+      })
+    ).user;
+
+    if(!context.mounted) return;
+    Navigator.pop(context);
+
+    DatabaseReference usersRef = FirebaseDatabase.instance.ref().child("users").child(userFirebase!.uid);
+    Map userDataMap =
+    {
+      "name": userNameTextEditingController.text.trim(),
+      "email": emailTextEditingController.text.trim(),
+      "phone": userPhoneTextEditingController.text.trim(),
+      "id": userFirebase.uid,
+      "blockStatus": "no",
+    };
+
+    usersRef.set(userDataMap);
+
+    Navigator.push(context, MaterialPageRoute(builder: (c)=>HomePage()));
+
   }
 
   @override
@@ -64,7 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                 "assets/images/logo.png"
               ),
 
-              Text(
+              const Text(
                 "Create a User\'s Account",
                 style: TextStyle(
                   fontSize: 26,
@@ -79,15 +122,15 @@ class _SignUpScreenState extends State<SignUpScreen>
                   children: [
 
                     TextField(
-                      controller: userNameEditingController,
+                      controller: userNameTextEditingController,
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: "User Name",
                         labelStyle: TextStyle(
                           fontSize: 14,
                         ),
                       ),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 15,
                       ),
@@ -96,15 +139,15 @@ class _SignUpScreenState extends State<SignUpScreen>
                     const SizedBox(height: 22,),
 
                     TextField(
-                      controller: userPhoneEditingController,
+                      controller: userPhoneTextEditingController,
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: "User Phone",
                         labelStyle: TextStyle(
                           fontSize: 14,
                         ),
                       ),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 15,
                       ),
@@ -115,13 +158,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                     TextField(
                       controller: emailTextEditingController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: "User Email",
                         labelStyle: TextStyle(
                           fontSize: 14,
                         ),
                       ),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 15,
                       ),
@@ -133,13 +176,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                       controller: passwordTextEditingController,
                       obscureText: true,
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: "User Password",
                         labelStyle: TextStyle(
                           fontSize: 14,
                         ),
                       ),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 15,
                       ),

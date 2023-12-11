@@ -7,9 +7,12 @@ Future<void> main() async
 {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: const FirebaseOptions(
-          apiKey:'Your API key',appId:'mobilesdk_app_id',messagingSenderId:'project_number',projectId:'project_id'
-      )
+      // options: const FirebaseOptions(
+          // apiKey: 'AIzaSyD5qOvnSzL-2HAVX3nwOLpH0KidSQJjZeg', // api key
+          // appId:'mobilesdk_app_id', // mobiledsk app id
+          // messagingSenderId: '20292785743', // project number
+          // projectId:'project_id' // project id
+      // )
   );
 
 
@@ -28,7 +31,7 @@ class MyApp extends StatelessWidget
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Colors.black,
       ),
-      home: LogInScreen(),
+      home: const LogInScreen(),
     );
   }
 }

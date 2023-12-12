@@ -9,9 +9,9 @@ Future<void> main() async
   await Firebase.initializeApp(
       options: const FirebaseOptions(
           apiKey: 'AIzaSyD5qOvnSzL-2HAVX3nwOLpH0KidSQJjZeg', // api key
-          appId:'mobilesdk_app_id', // mobiledsk app id
+          appId:'1:20292785743:android:a7328233aeae9d4986fc3a', // mobiledsk app id
           messagingSenderId: '20292785743', // project number
-          projectId:'project_id' // project id
+          projectId:'usper-app-flutter' // project id
       )
   );
 

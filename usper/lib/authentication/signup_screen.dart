@@ -89,7 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen>
 
     usersRef.set(userDataMap);
 
-    Navigator.push(context, MaterialPageRoute(builder: (c)=>HomePage()));
+    Navigator.push(context, MaterialPageRoute(builder: (c)=>const LogInScreen()));
 
   }
 
@@ -214,7 +214,7 @@ class _SignUpScreenState extends State<SignUpScreen>
               TextButton(
                 onPressed: ()
                 {
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=> LogInScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (c)=> const LogInScreen()));
                 },
                 child: const Text(
                   "Already have an account? Login here",
